@@ -11,7 +11,7 @@ struct PostsResponse: Codable {
     let posts: [Post]
 }
 
-struct Post: Codable {
+struct Post: Codable, Hashable {
     let postId: Int
     let timeshamp: Int 
     let title: String
