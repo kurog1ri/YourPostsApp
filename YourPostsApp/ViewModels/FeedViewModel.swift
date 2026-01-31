@@ -27,4 +27,8 @@ final class FeedViewModel {
             expandedPostIds.insert(postId)
         }
     }
+
+    func post(for postId: Int) -> Post? {
+        posts.first { $0.postId == postId }
+    }
 }

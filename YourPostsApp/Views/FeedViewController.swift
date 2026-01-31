@@ -5,10 +5,6 @@
 
 import UIKit
 
-private enum Section {
-    case main
-}
-
 final class FeedViewController: UIViewController {
 
     private let viewModel = FeedViewModel()
@@ -30,7 +26,7 @@ final class FeedViewController: UIViewController {
         return indicator
     }()
 
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Post>!
+    private var dataSource: UICollectionViewDiffableDataSource<Int, Int>!
 
     // MARK: - Lifecycle
 
@@ -68,20 +64,20 @@ final class FeedViewController: UIViewController {
     }
 
     private func configureDataSource() {
-        let cellRegistration = UICollectionView.CellRegistration<PostCell, Post> { [weak self] cell, indexPath, post in
-            guard let self else { return }
+        let cellRegistration = UICollectionView.CellRegistration<PostCell, Int> { [weak self] (cell: PostCell, indexPath: IndexPath, postId: Int) in
+            guard let self, let post = self.viewModel.post(for: postId) else { return }
 
-            let isExpanded = viewModel.isExpanded(postId: post.postId)
+            let isExpanded = self.viewModel.isExpanded(postId: postId)
             cell.configure(with: post, isExpanded: isExpanded)
 
             cell.onExpandTapped = {
-                self.viewModel.toggleExpand(postId: post.postId)
-                self.reconfigureItem(post)
+                self.viewModel.toggleExpand(postId: postId)
+                self.reconfigureItem(postId)
             }
         }
 
-        dataSource = UICollectionViewDiffableDataSource<Section, Post>(collectionView: collectionView) { collectionView, indexPath, post in
-            collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: post)
+        dataSource = UICollectionViewDiffableDataSource<Int, Int>(collectionView: collectionView) { (collectionView: UICollectionView, indexPath: IndexPath, postId: Int) -> UICollectionViewCell? in
+            collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: postId)
         }
     }
 
@@ -102,15 +98,15 @@ final class FeedViewController: UIViewController {
     }
 
     private func applySnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Post>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(viewModel.posts)
+        var snapshot = NSDiffableDataSourceSnapshot<Int, Int>()
+        snapshot.appendSections([0])
+        snapshot.appendItems(viewModel.posts.map { $0.postId })
         dataSource.apply(snapshot, animatingDifferences: true)
     }
 
-    private func reconfigureItem(_ post: Post) {
+    private func reconfigureItem(_ postId: Int) {
         var snapshot = dataSource.snapshot()
-        snapshot.reconfigureItems([post])
+        snapshot.reconfigureItems([postId])
         dataSource.apply(snapshot, animatingDifferences: true)
     }
 
@@ -131,9 +127,9 @@ extension FeedViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
 
-        guard let post = dataSource.itemIdentifier(for: indexPath) else { return }
+        guard let postId = dataSource.itemIdentifier(for: indexPath) else { return }
 
-        let detailVC = PostDetailViewController(postId: post.postId)
+        let detailVC = PostDetailViewController(postId: postId)
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

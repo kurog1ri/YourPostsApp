@@ -11,9 +11,9 @@ struct PostsResponse: Codable {
     let posts: [Post]
 }
 
-struct Post: Codable, Hashable {
+struct Post: Codable, Sendable {
     let postId: Int
-    let timeshamp: Int 
+    let timeshamp: Int
     let title: String
     let previewText: String
     let likesCount: Int
@@ -24,6 +24,16 @@ struct Post: Codable, Hashable {
         case title
         case previewText = "preview_text"
         case likesCount = "likes_count"
+    }
+}
+
+extension Post: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(postId)
+    }
+
+    static func == (lhs: Post, rhs: Post) -> Bool {
+        lhs.postId == rhs.postId
     }
 }
 
