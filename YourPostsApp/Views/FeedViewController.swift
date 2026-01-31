@@ -5,6 +5,10 @@
 
 import UIKit
 
+private enum Section {
+    case main
+}
+
 final class FeedViewController: UIViewController {
 
     private let viewModel = FeedViewModel()
@@ -27,10 +31,6 @@ final class FeedViewController: UIViewController {
     }()
 
     private var dataSource: UICollectionViewDiffableDataSource<Section, Post>!
-
-    private enum Section {
-        case main
-    }
 
     // MARK: - Lifecycle
 
