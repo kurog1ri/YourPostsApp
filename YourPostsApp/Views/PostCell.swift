@@ -49,6 +49,8 @@ final class PostCell: UICollectionViewCell {
     private let expandButton: UIButton = {
         let button = UIButton(type: .system)
         button.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
+        button.layer.cornerRadius = 8
+        button.clipsToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -90,10 +92,27 @@ final class PostCell: UICollectionViewCell {
             dateLabel.centerYAnchor.constraint(equalTo: likesLabel.centerYAnchor),
             dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
-            expandButton.topAnchor.constraint(equalTo: likesLabel.bottomAnchor, constant: 8),
+            expandButton.topAnchor.constraint(equalTo: likesLabel.bottomAnchor, constant: 12),
             expandButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            expandButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            expandButton.heightAnchor.constraint(equalToConstant: 40),
             expandButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12)
         ])
+
+        updateExpandButtonAppearance()
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateExpandButtonAppearance()
+        }
+    }
+
+    private func updateExpandButtonAppearance() {
+        let isDark = traitCollection.userInterfaceStyle == .dark
+        expandButton.backgroundColor = isDark ? UIColor(white: 0.85, alpha: 1) : UIColor(white: 0.35, alpha: 1)
+        expandButton.setTitleColor(isDark ? .black : .white, for: .normal)
     }
 
     // MARK: - Actions
