@@ -28,11 +28,16 @@ final class FeedViewController: UIViewController {
 
     private var dataSource: UICollectionViewDiffableDataSource<Int, Int>!
 
+    private var isDarkMode: Bool {
+        view.window?.overrideUserInterfaceStyle == .dark
+    }
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupThemeToggle()
         configureDataSource()
         loadPosts()
     }
@@ -61,6 +66,27 @@ final class FeedViewController: UIViewController {
         var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
         configuration.showsSeparators = true
         return UICollectionViewCompositionalLayout.list(using: configuration)
+    }
+
+    private func setupThemeToggle() {
+        updateThemeButtonIcon()
+    }
+
+    private func updateThemeButtonIcon() {
+        let iconName = isDarkMode ? "moon.stars.fill" : "sun.max.fill"
+        let icon = UIImage(systemName: iconName)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: icon,
+            style: .plain,
+            target: self,
+            action: #selector(toggleTheme)
+        )
+    }
+
+    @objc private func toggleTheme() {
+        let newStyle: UIUserInterfaceStyle = isDarkMode ? .light : .dark
+        view.window?.overrideUserInterfaceStyle = newStyle
+        updateThemeButtonIcon()
     }
 
     private func configureDataSource() {
