@@ -134,10 +134,10 @@ final class PostDetailViewController: UIViewController {
 
             likesLabel.topAnchor.constraint(equalTo: textLabel.bottomAnchor, constant: 16),
             likesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            likesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
 
-            dateLabel.topAnchor.constraint(equalTo: likesLabel.bottomAnchor, constant: 8),
-            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            dateLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
+            dateLabel.centerYAnchor.constraint(equalTo: likesLabel.centerYAnchor),
+            dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)

@@ -25,13 +25,13 @@ final class PostDetailViewModel {
 
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMM d, yyyy"
+        formatter.dateFormat = "d MMMM yyyy"
 
         return formatter.string(from: date)
     }
 
     var formattedLikes: String {
         guard let likes = postDetail?.likesCount else { return "" }
-        return "\(likes) likes"
+        return "❤️ \(likes)"
     }
 }

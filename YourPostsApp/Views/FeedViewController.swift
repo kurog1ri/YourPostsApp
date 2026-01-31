@@ -68,7 +68,8 @@ final class FeedViewController: UIViewController {
             guard let self, let post = self.viewModel.post(for: postId) else { return }
 
             let isExpanded = self.viewModel.isExpanded(postId: postId)
-            cell.configure(with: post, isExpanded: isExpanded)
+            let relativeDate = self.viewModel.relativeDate(for: post.timeshamp)
+            cell.configure(with: post, isExpanded: isExpanded, relativeDate: relativeDate)
 
             cell.onExpandTapped = {
                 self.viewModel.toggleExpand(postId: postId)

@@ -30,6 +30,22 @@ final class PostCell: UICollectionViewCell {
         return label
     }()
 
+    private let likesLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14)
+        label.textColor = .secondaryLabel
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let dateLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14)
+        label.textColor = .secondaryLabel
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
     private let expandButton: UIButton = {
         let button = UIButton(type: .system)
         button.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
@@ -53,6 +69,8 @@ final class PostCell: UICollectionViewCell {
     private func setupUI() {
         contentView.addSubview(titleLabel)
         contentView.addSubview(previewLabel)
+        contentView.addSubview(likesLabel)
+        contentView.addSubview(dateLabel)
         contentView.addSubview(expandButton)
 
         expandButton.addTarget(self, action: #selector(expandButtonTapped), for: .touchUpInside)
@@ -66,7 +84,13 @@ final class PostCell: UICollectionViewCell {
             previewLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             previewLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
-            expandButton.topAnchor.constraint(equalTo: previewLabel.bottomAnchor, constant: 8),
+            likesLabel.topAnchor.constraint(equalTo: previewLabel.bottomAnchor, constant: 12),
+            likesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+
+            dateLabel.centerYAnchor.constraint(equalTo: likesLabel.centerYAnchor),
+            dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+
+            expandButton.topAnchor.constraint(equalTo: likesLabel.bottomAnchor, constant: 8),
             expandButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             expandButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12)
         ])
@@ -80,9 +104,11 @@ final class PostCell: UICollectionViewCell {
 
     // MARK: - Configure
 
-    func configure(with post: Post, isExpanded: Bool) {
+    func configure(with post: Post, isExpanded: Bool, relativeDate: String) {
         titleLabel.text = post.title
         previewLabel.text = post.previewText
+        likesLabel.text = "❤️ \(post.likesCount)"
+        dateLabel.text = relativeDate
 
         if isExpanded {
             previewLabel.numberOfLines = 0

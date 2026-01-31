@@ -31,4 +31,11 @@ final class FeedViewModel {
     func post(for postId: Int) -> Post? {
         posts.first { $0.postId == postId }
     }
+
+    func relativeDate(for timestamp: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return formatter.localizedString(for: date, relativeTo: Date())
+    }
 }
